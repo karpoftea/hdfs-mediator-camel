@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d %p [%t] %C{0}.%M - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework" level="warn"/>
+    <logger name="org.springframework.web.client" level="debug"/>
+
+    <logger name="org.eclipse.jetty" level="warn"/>
+
+    <logger name="org.hibernate.validator" level="warn"/>
+
+    <logger name="org.glassfish.jersey.filter.LoggingFilter" level="info"/>
+
+    <logger name="org.apache.camel.component.hdfs2" level="info"/>
+
+    <logger name="com.adform.hdfs.uploader" level="debug"/>
+
+    <root level="info">
+        <appender-ref ref="console" />
+    </root>
+</configuration>

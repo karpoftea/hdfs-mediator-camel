@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:metrics="http://www.ryantenney.com/schema/metrics"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+       http://www.ryantenney.com/schema/metrics http://www.ryantenney.com/schema/metrics/metrics-3.0.xsd">
+
+       <bean id="mbeanServer" class="java.lang.management.ManagementFactory" factory-method="getPlatformMBeanServer" />
+
+       <camel:camelContext id="mainCtx">
+              <camel:package>my.hdfs.mediator.camel.config</camel:package>
+       </camel:camelContext>
+
+       <metrics:metric-registry id="metrics" name="metricRegistry"/>
+
+       <metrics:reporter type="jmx" metric-registry="metrics"
+                         domain="my"
+                         mbean-server-ref="mbeanServer"
+                         rate-unit="SECONDS"
+                         duration-unit="DAYS"/>
+
+       <bean id="camelConfig" class="my.hdfs.mediator.camel.config.CamelConfiguration" init-method="init">
+              <constructor-arg name="context" ref="mainCtx"/>
+              <constructor-arg name="brokerList" value="${kafka.broker.list}"/>
+              <constructor-arg name="zookeeperConnect" value="${zookeeper.connection}"/>
+              <constructor-arg name="topic" value="${kafka.rawCookieSync.topic.name}"/>
+              <constructor-arg name="consumersCount" value="${kafka.rawCookieSync.topic.consumersCount}"/>
+       </bean>
+</beans>
